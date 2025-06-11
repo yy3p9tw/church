@@ -5,6 +5,132 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>近期消息</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* 導覽列固定在最上方，寬度100%，高度螢幕高的1/10 */
+        .nav {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 10vh;
+          background: #fff;
+          z-index: 1000;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+          display: flex;
+          align-items: center;
+        }
+        .container {
+          padding: 0;
+          margin: 0;
+        }
+        .content-area {
+          margin-top: 10vh;
+          padding: 0;
+        }
+        .content {
+          width: 100vw;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          background: #e3f0ff;
+          box-sizing: border-box;
+          padding: 0;
+        }
+        .faith-section {
+          width: 100vw;
+          min-height: 100vh;
+          background: #e3f0ff;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          box-sizing: border-box;
+          padding: 0;
+        }
+        .belief-section {
+          width: 100vw;
+          min-height: 100vh;
+          background: #fffbe3;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          box-sizing: border-box;
+          padding: 0;
+        }
+        .footer {
+          width: 100vw;
+          min-height: 50vh;
+          background: #f2f2f2;
+          color: #888;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
+        .footer-main {
+          display: flex;
+          width: 100vw;
+          justify-content: space-between;
+          align-items: flex-start;
+          padding: 2rem 5vw 1rem 5vw;
+          box-sizing: border-box;
+        }
+        .footer-col.left, .footer-col.center, .footer-col.right {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+        }
+        .footer-col.left {
+          align-items: flex-start;
+        }
+        .footer-col.right {
+          align-items: flex-end;
+        }
+        .footer .logo img {
+          width: 80px;
+          height: auto;
+        }
+        .footer .social a img {
+          width: 32px;
+          height: 32px;
+          margin-right: 8px;
+        }
+        .footer .map iframe {
+          border-radius: 8px;
+        }
+        .footer .info {
+          font-size: 1rem;
+          line-height: 1.8;
+        }
+        .footer-copyright {
+          width: 100vw;
+          text-align: center;
+          padding: 1rem 0 0.5rem 0;
+          font-size: 0.95rem;
+          color: #bbb;
+        }
+        @media (max-width: 900px) {
+          .footer-main {
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+          }
+          .footer-col.left, .footer-col.center, .footer-col.right {
+            align-items: center !important;
+          }
+        }
+        @media (max-width: 600px) {
+          .nav, .faith-section, .belief-section, .footer {
+            width: 100vw;
+            min-width: 0;
+          }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -26,7 +152,7 @@
             </div>
             <div class="dropdown">公告
                 <div class="dropdown-content">
-                    <a href="./index.html#notice">公告</a>
+                    <a href="./recent.html">公告</a>
                 </div>
             </div>
             <div class="dropdown">聯絡我們
@@ -40,6 +166,12 @@
             <div class="content">
                 <h2>近期消息</h2>
                 <p>這裡是近期消息分頁內容，請根據實際情況補充內容。</p>
+            </div>
+            <div class="calendar-section">
+                <h2 style="margin-top:0;">主日崇拜行事曆</h2>
+                <div class="calendar-wrap">
+                    <iframe src="https://calendar.google.com/calendar/embed?src=your_calendar_id&ctz=Asia%2FTaipei" style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+                </div>
             </div>
         </div>
         <div class="footer">

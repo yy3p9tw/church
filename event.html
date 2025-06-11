@@ -3,8 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>聯絡我們</title>
+    <title>招募職缺</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* 導覽列固定在最上方，寬度100%，高度螢幕高的1/10 */
+        .nav {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 10vh;
+          background: #fff;
+          z-index: 1000;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+          display: flex;
+          align-items: center;
+        }
+        .container {
+          padding: 0;
+          margin: 0;
+        }
+        .content-area {
+          margin-top: 10vh;
+          padding: 0;
+        }
+        .content {
+          width: 100vw;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          background: #e3f0ff;
+          box-sizing: border-box;
+          padding: 0;
+        }
+        .faith-section {
+          width: 100vw;
+          min-height: 100vh;
+          background: #e3f0ff;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          box-sizing: border-box;
+          padding: 0;
+        }
+        .belief-section {
+          width: 100vw;
+          min-height: 100vh;
+          background: #fffbe3;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          box-sizing: border-box;
+          padding: 0;
+        }
+        .footer {
+          width: 100vw;
+          min-height: 50vh;
+          background: #f2f2f2;
+          color: #888;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
+        .footer-main {
+          display: flex;
+          width: 100vw;
+          justify-content: space-between;
+          align-items: flex-start;
+          padding: 2rem 5vw 1rem 5vw;
+          box-sizing: border-box;
+        }
+        .footer-col.left, .footer-col.center, .footer-col.right {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+        }
+        .footer-col.left {
+          align-items: flex-start;
+        }
+        .footer-col.right {
+          align-items: flex-end;
+        }
+        .footer .logo img {
+          width: 80px;
+          height: auto;
+        }
+        .footer .social a img {
+          width: 32px;
+          height: 32px;
+          margin-right: 8px;
+        }
+        .footer .map iframe {
+          border-radius: 8px;
+        }
+        .footer .info {
+          font-size: 1rem;
+          line-height: 1.8;
+        }
+        .footer-copyright {
+          width: 100vw;
+          text-align: center;
+          padding: 1rem 0 0.5rem 0;
+          font-size: 0.95rem;
+          color: #bbb;
+        }
+        @media (max-width: 900px) {
+          .footer-main {
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+          }
+          .footer-col.left, .footer-col.center, .footer-col.right {
+            align-items: center !important;
+          }
+        }
+        @media (max-width: 600px) {
+          .nav, .faith-section, .belief-section, .footer {
+            width: 100vw;
+            min-width: 0;
+          }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -26,7 +152,7 @@
             </div>
             <div class="dropdown">公告
                 <div class="dropdown-content">
-                    <a href="./index.html#notice">公告</a>
+                    <a href="./recent.html">公告</a>
                 </div>
             </div>
             <div class="dropdown">聯絡我們
@@ -38,12 +164,12 @@
         </div>
         <div class="content-area">
             <div class="content">
-                <h2 id="contact">聯絡我們</h2>
+                <h2 id="contact">招募職缺</h2>
                 <form style="width:100%;max-width:400px;margin:0 auto;display:flex;flex-direction:column;gap:16px;">
                     <label>姓名：<input type="text" name="name" required style="width:100%;padding:8px;"></label>
                     <label>Email：<input type="email" name="email" required style="width:100%;padding:8px;"></label>
-                    <label>主旨：<input type="text" name="subject" style="width:100%;padding:8px;"></label>
-                    <label>內容：<textarea name="message" rows="5" required style="width:100%;padding:8px;"></textarea></label>
+                    <label>應徵職缺：<input type="text" name="subject" style="width:100%;padding:8px;"></label>
+                    <label>自我介紹：<textarea name="message" rows="5" required style="width:100%;padding:8px;"></textarea></label>
                     <button type="submit" style="background:#ff9800;color:#fff;padding:10px 0;border:none;border-radius:4px;font-size:1.1em;cursor:pointer;">送出</button>
                 </form>
             </div>
