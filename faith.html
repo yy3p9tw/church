@@ -4,197 +4,112 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>信仰宣言</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* 導覽列固定在最上方，寬度100%，高度螢幕高的1/10 */
-        .nav {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 10vh;
-          background: #fff;
-          z-index: 1000;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-          display: flex;
-          align-items: center;
-        }
-        .container {
-          padding: 0;
-          margin: 0;
-        }
-        .content-area {
-          margin-top: 10vh; /* 內容區塊下移，避開固定導覽列 */
-        }
-        .faith-section {
-          width: 100vw;
-          min-height: 100vh;
-          background: #e3f0ff;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          box-sizing: border-box;
-          padding: 0;
-        }
-        .belief-section {
-          width: 100vw;
-          min-height: 100vh;
-          background: #fffbe3;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          box-sizing: border-box;
-          padding: 0;
-        }
-        .footer {
-          width: 100vw;
-          min-height: 50vh;
-          background: #f2f2f2;
-          color: #888;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        .footer-main {
-          display: flex;
-          width: 100vw;
-          justify-content: space-between;
-          align-items: flex-start;
-          padding: 2rem 5vw 1rem 5vw;
-          box-sizing: border-box;
-        }
-        .footer-col.left, .footer-col.center, .footer-col.right {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 1rem;
-        }
-        .footer-col.left {
-          align-items: flex-start;
-        }
-        .footer-col.right {
-          align-items: flex-end;
-        }
-        .footer .logo img {
-          width: 80px;
-          height: auto;
-        }
-        .footer .social a img {
-          width: 32px;
-          height: 32px;
-          margin-right: 8px;
-        }
-        .footer .map iframe {
-          border-radius: 8px;
-        }
-        .footer .info {
-          font-size: 1rem;
-          line-height: 1.8;
-        }
-        .footer-copyright {
-          width: 100vw;
-          text-align: center;
-          padding: 1rem 0 0.5rem 0;
-          font-size: 0.95rem;
-          color: #bbb;
-        }
-        @media (max-width: 900px) {
-          .footer-main {
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
-          }
-          .footer-col.left, .footer-col.center, .footer-col.right {
-            align-items: center !important;
-          }
-        }
-        @media (max-width: 600px) {
-          .nav, .faith-section, .belief-section, .footer {
-            width: 100vw;
-            min-width: 0;
-          }
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="nav">
-            <div class="dropdown">關於我們
-                <div class="dropdown-content">
-                    <a href="./about.html">教會簡介</a>
-                    <a href="./faith.html">信仰宣言</a>
-                </div>
-            </div>
-            <div class="dropdown">聚會時間
-                <div class="dropdown-content">
-                    <a href="./sunday.html">主日崇拜</a>
-                    <a href="./cell.html">小組聚會</a>
-                </div>
-            </div>
-            <div class="logo">
-                <a href="./index.html"><img src="logo.png" alt="教會logo"></a>
-            </div>
-            <div class="dropdown">公告
-                <div class="dropdown-content">
-                    <a href="./recent.html">公告</a>
-                </div>
-            </div>
-            <div class="dropdown">週報
-                <div class="dropdown-content">
-                    <a href="./event.html">週報</a>
-                    <a href="#contact2">年度報告</a>
-                </div>
-            </div>
+    <!-- 導覽列 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="./index.html">
+          <img src="logo.png" alt="教會logo" width="48" height="48" class="me-2">
+          蘆洲大喜樂基督教會
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="aboutDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">關於我們</a>
+              <ul class="dropdown-menu" aria-labelledby="aboutDropdown">
+                <li><a class="dropdown-item" href="./about.html">教會簡介</a></li>
+                <li><a class="dropdown-item" href="./faith.html">信仰宣言</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="meetingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">聚會時間</a>
+              <ul class="dropdown-menu" aria-labelledby="meetingDropdown">
+                <li><a class="dropdown-item" href="./sunday.html">主日崇拜</a></li>
+                <li><a class="dropdown-item" href="./cell.html">小組聚會</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./recent.html">公告</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="reportDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">週報</a>
+              <ul class="dropdown-menu" aria-labelledby="reportDropdown">
+                <li><a class="dropdown-item" href="./event.html">週報</a></li>
+                <li><a class="dropdown-item" href="#contact2">年度報告</a></li>
+              </ul>
+            </li>
+          </ul>
         </div>
-        <div class="content-area">
-            <section class="faith-section">
-                <h2>信仰宣言</h2>
-                <p>這裡是信仰宣言分頁內容，請根據實際情況補充內容。</p>
-            </section>
-            <section class="belief-section">
-                <h3>我們的信仰</h3>
-                <p>我們相信聖經是神的話語，是信仰和生活的最高權威。我們相信三位一體的神：父、子、聖靈。耶穌基督是我們的救主，祂的死和復活為我們帶來救贖。我們相信聖靈在信徒生命中的工作，賜予我們力量和智慧去活出基督的樣式。我們呼召每位信徒在愛中彼此相待，並向世界傳揚福音。</p>
-            </section>
-        </div>
-        <div class="footer">
-            <div class="footer-main">
-                <div class="footer-col left">
-                    <div class="logo">
-                        <img src="logo.png" alt="教會logo">
-                    </div>
-                    <div class="social">
-                        <a href="https://www.youtube.com/" target="_blank">
-                            <img src="yt_icon.png" alt="YouTube">
-                        </a>
-                        <a href="https://www.facebook.com/" target="_blank">
-                            <img src="fb_icon.png" alt="Facebook">
-                        </a>
-                    </div>
-                </div>
-                <div class="footer-col center">
-                    <div class="map">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.902954624478!2d121.56541731536346!3d25.03396498397225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abbf8e8e8e8f%3A0x8e8e8e8e8e8e8e8e!2z5Y-w5YyX5biC!5e0!3m2!1szh-TW!2stw!4v1680000000000!5m2!1szh-TW!2stw"
-                            width="300" height="150" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                    </div>
-                </div>
-                <div class="footer-col right">
-                    <div class="info">
-                        聯絡信箱: <a href="mailto:contact@church.com">contact@church.com</a><br>
-                        聯絡電話: <a href="tel:+123456789">+123 456 789</a><br>
-                        地址: 台北市信義區信義路5段100號<br>
-                        開放時間: 每週一至週五 9:00 - 17:00
-                    </div>
-                </div>
+      </div>
+    </nav>
+
+    <!-- 內容區塊 -->
+    <main class="container" style="padding-top: 90px; min-height: 60vh;">
+      <div class="row justify-content-center mb-4">
+        <div class="col-12 col-md-10 col-lg-8">
+          <div class="card shadow-sm mb-4">
+            <div class="card-body text-center">
+              <h2 class="card-title mb-3">信仰宣言</h2>
+              <p class="card-text">這裡是信仰宣言分頁內容，請根據實際情況補充內容。</p>
             </div>
-            <div class="footer-copyright">
-                版權所有 &copy; 2025 YU 蘆洲大喜樂基督教會
-            </div>
+          </div>
         </div>
-    </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+          <div class="card shadow-sm">
+            <div class="card-body text-center">
+              <h3 class="card-title mb-3">我們的信仰</h3>
+              <p class="card-text">我們相信聖經是神的話語，是信仰和生活的最高權威。我們相信三位一體的神：父、子、聖靈。耶穌基督是我們的救主，祂的死和復活為我們帶來救贖。我們相信聖靈在信徒生命中的工作，賜予我們力量和智慧去活出基督的樣式。我們呼召每位信徒在愛中彼此相待，並向世界傳揚福音。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="bg-light text-muted pt-4 mt-auto border-top">
+      <div class="container">
+        <div class="row align-items-start pb-3">
+          <div class="col-12 col-md-4 mb-3 mb-md-0 text-center text-md-start">
+            <img src="logo.png" alt="教會logo" width="80" class="mb-2">
+            <div class="mb-2">
+              <a href="https://www.youtube.com/" target="_blank" class="me-2">
+                <img src="yt_icon.png" alt="YouTube" width="32" height="32">
+              </a>
+              <a href="https://www.facebook.com/" target="_blank">
+                <img src="fb_icon.png" alt="Facebook" width="32" height="32">
+              </a>
+            </div>
+          </div>
+          <div class="col-12 col-md-4 mb-3 mb-md-0 text-center">
+            <div class="ratio ratio-16x9 mb-2" style="max-width:300px; margin:auto;">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.902954624478!2d121.56541731536346!3d25.03396498397225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abbf8e8e8e8f%3A0x8e8e8e8e8e8e8e8e!2z5Y-w5YyX5biC!5e0!3m2!1szh-TW!2stw!4v1680000000000!5m2!1szh-TW!2stw"
+                width="300" height="150" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+          </div>
+          <div class="col-12 col-md-4 text-center text-md-end">
+            <div class="mb-2">
+              聯絡信箱: <a href="mailto:contact@church.com">contact@church.com</a><br>
+              聯絡電話: <a href="tel:+123456789">+123 456 789</a><br>
+              地址: 台北市信義區信義路5段100號<br>
+              開放時間: 每週一至週五 9:00 - 17:00
+            </div>
+          </div>
+        </div>
+        <div class="text-center pb-2 small text-secondary">
+          版權所有 &copy; 2025 YU 蘆洲大喜樂基督教會
+        </div>
+      </div>
+    </footer>
 </body>
 </html>
