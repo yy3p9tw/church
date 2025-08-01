@@ -124,6 +124,10 @@ $title = '後台管理 - 系統設定';
                         <i class="fas fa-calendar me-2"></i>
                         活動管理
                     </a>
+                    <a class="nav-link" href="bulletins.php">
+                        <i class="fas fa-file-alt me-2"></i>
+                        週報管理
+                    </a>
                     <a class="nav-link" href="staff.php">
                         <i class="fas fa-users me-2"></i>
                         同工管理

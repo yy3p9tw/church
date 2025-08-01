@@ -1,12 +1,11 @@
 <?php
 include 'auth.php';
-require_once '../config/upload.php';
 requireLogin();
 
 $error = '';
 $success = '';
 
-// 處理檔案上傳和新增/編輯講道
+// 處理新增/編輯講道
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? 'add';
     $id = $_POST['id'] ?? null;
@@ -14,44 +13,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $speaker = trim($_POST['speaker'] ?? '');
     $sermon_date = $_POST['sermon_date'] ?? date('Y-m-d');
     $content = trim($_POST['content'] ?? '');
+    $youtube_url = trim($_POST['youtube_url'] ?? '');
+    $status = $_POST['status'] ?? 'published';
     
     if (empty($title) || empty($speaker)) {
         $error = '標題和講員不能為空';
     } else {
         try {
-            // 處理音頻檔案上傳
-            $audio_url = '';
-            if (isset($_FILES['audio']) && $_FILES['audio']['error'] === UPLOAD_ERR_OK) {
-                $audioUpload = new AudioUpload('public/uploads/sermons/');
-                $result = $audioUpload->upload($_FILES['audio']);
-                if ($result) {
-                    $audio_url = str_replace('public/', '', $result['path']);
+            // 處理 YouTube URL
+            $youtube_id = '';
+            if (!empty($youtube_url)) {
+                // 從 YouTube URL 提取影片 ID
+                if (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/', $youtube_url, $matches)) {
+                    $youtube_id = $matches[1];
                 } else {
-                    $error = '音頻檔案上傳失敗：' . $audioUpload->getLastError();
+                    $error = 'YouTube 連結格式不正確';
                 }
             }
             
             if (!$error) {
                 if ($action === 'edit' && $id) {
                     // 更新
-                    $sql = "UPDATE sermons SET title = ?, speaker = ?, sermon_date = ?, content = ?";
-                    $params = [$title, $speaker, $sermon_date, $content];
-                    
-                    if ($audio_url) {
-                        $sql .= ", audio_url = ?";
-                        $params[] = $audio_url;
-                    }
-                    
-                    $sql .= " WHERE id = ?";
-                    $params[] = $id;
-                    
-                    $db->query($sql, $params);
+                    $db->query(
+                        "UPDATE sermons SET title = ?, speaker = ?, sermon_date = ?, youtube_url = ?, youtube_id = ?, content = ?, status = ? WHERE id = ?",
+                        [$title, $speaker, $sermon_date, $youtube_url, $youtube_id, $content, $status, $id]
+                    );
                     $success = '講道已成功更新';
                 } else {
                     // 新增
                     $db->query(
-                        "INSERT INTO sermons (title, speaker, sermon_date, audio_url, content, status) VALUES (?, ?, ?, ?, ?, 'published')",
-                        [$title, $speaker, $sermon_date, $audio_url, $content]
+                        "INSERT INTO sermons (title, speaker, sermon_date, youtube_url, youtube_id, content, status) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                        [$title, $speaker, $sermon_date, $youtube_url, $youtube_id, $content, $status]
                     );
                     $success = '講道已成功新增';
                 }
@@ -65,14 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // 處理刪除
 if (isset($_GET['delete'])) {
     try {
-        $sermon = $db->fetchOne("SELECT audio_url FROM sermons WHERE id = ?", [$_GET['delete']]);
-        if ($sermon && $sermon['audio_url']) {
-            // 刪除實體檔案
-            $filePath = 'public/' . $sermon['audio_url'];
-            if (file_exists($filePath)) {
-                unlink($filePath);
-            }
-        }
         $db->query("DELETE FROM sermons WHERE id = ?", [$_GET['delete']]);
         $success = '講道已刪除';
     } catch (Exception $e) {
@@ -170,6 +154,10 @@ $title = '後台管理 - 講道管理';
                         <i class="fas fa-calendar me-2"></i>
                         活動管理
                     </a>
+                    <a class="nav-link" href="bulletins.php">
+                        <i class="fas fa-file-alt me-2"></i>
+                        週報管理
+                    </a>
                     <a class="nav-link" href="staff.php">
                         <i class="fas fa-users me-2"></i>
                         同工管理
@@ -229,20 +217,38 @@ $title = '後台管理 - 講道管理';
                             <p class="text-muted mb-2">
                                 <i class="fas fa-calendar me-1"></i><?= $sermon['sermon_date'] ?>
                             </p>
+                            <p class="mb-2">
+                                <?php if ($sermon['status'] === 'published'): ?>
+                                    <span class="badge bg-success">已發布</span>
+                                <?php else: ?>
+                                    <span class="badge bg-secondary">草稿</span>
+                                <?php endif; ?>
+                            </p>
                             
                             <?php if ($sermon['content']): ?>
                                 <p class="small text-muted mb-3"><?= htmlspecialchars(substr($sermon['content'], 0, 100)) ?>...</p>
                             <?php endif; ?>
                             
-                            <!-- 音頻播放器 -->
-                            <?php if ($sermon['audio_url']): ?>
-                                <audio class="audio-player" controls>
-                                    <source src="../public/<?= $sermon['audio_url'] ?>" type="audio/mpeg">
-                                    您的瀏覽器不支援音頻播放
-                                </audio>
+                            <!-- YouTube 播放器 -->
+                            <?php if ($sermon['youtube_id']): ?>
+                                <div class="youtube-player mb-3">
+                                    <iframe width="100%" height="200" 
+                                            src="https://www.youtube.com/embed/<?= htmlspecialchars($sermon['youtube_id']) ?>" 
+                                            title="<?= htmlspecialchars($sermon['title']) ?>"
+                                            frameborder="0" 
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                            allowfullscreen></iframe>
+                                </div>
+                            <?php elseif ($sermon['youtube_url']): ?>
+                                <div class="text-muted mb-3">
+                                    <i class="fas fa-play-circle me-1"></i>
+                                    <a href="<?= htmlspecialchars($sermon['youtube_url']) ?>" target="_blank">
+                                        觀看 YouTube 影片
+                                    </a>
+                                </div>
                             <?php else: ?>
                                 <div class="text-muted mb-3">
-                                    <i class="fas fa-music me-1"></i>無音頻檔案
+                                    <i class="fas fa-video me-1"></i>無影片連結
                                 </div>
                             <?php endif; ?>
                             
@@ -277,10 +283,10 @@ $title = '後台管理 - 講道管理';
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><?= $editSermon ? '編輯講道' : '上傳講道' ?></h5>
+                    <h5 class="modal-title"><?= $editSermon ? '編輯講道' : '新增講道' ?></h5>
                     <a href="sermons.php" class="btn-close"></a>
                 </div>
-                <form method="POST" enctype="multipart/form-data">
+                <form method="POST">
                     <input type="hidden" name="action" value="<?= $editSermon ? 'edit' : 'add' ?>">
                     <?php if ($editSermon): ?>
                         <input type="hidden" name="id" value="<?= $editSermon['id'] ?>">
@@ -302,16 +308,29 @@ $title = '後台管理 - 講道管理';
                                    value="<?= $editSermon ? $editSermon['sermon_date'] : date('Y-m-d') ?>">
                         </div>
                         <div class="mb-3">
-                            <label for="audio" class="form-label">音頻檔案</label>
-                            <input type="file" class="form-control" id="audio" name="audio" accept="audio/*" 
-                                   <?= $editSermon ? '' : 'required' ?>>
-                            <div class="form-text">支援格式：MP3, WAV, M4A（最大50MB）</div>
-                            <?php if ($editSermon && $editSermon['audio_url']): ?>
+                            <label for="status" class="form-label">狀態</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="published" <?= (!$editSermon || $editSermon['status'] === 'published') ? 'selected' : '' ?>>已發布</option>
+                                <option value="draft" <?= ($editSermon && $editSermon['status'] === 'draft') ? 'selected' : '' ?>>草稿</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="youtube_url" class="form-label">YouTube 連結</label>
+                            <input type="url" class="form-control" id="youtube_url" name="youtube_url" 
+                                   value="<?= $editSermon ? htmlspecialchars($editSermon['youtube_url']) : '' ?>"
+                                   placeholder="https://www.youtube.com/watch?v=...">
+                            <div class="form-text">
+                                請輸入 YouTube 影片完整連結，例如：https://www.youtube.com/watch?v=dQw4w9WgXcQ
+                            </div>
+                            <?php if ($editSermon && $editSermon['youtube_id']): ?>
                                 <div class="mt-2">
-                                    <small class="text-muted">目前音頻：</small><br>
-                                    <audio controls class="mt-1" style="width: 100%; max-width: 300px;">
-                                        <source src="../public/<?= $editSermon['audio_url'] ?>" type="audio/mpeg">
-                                    </audio>
+                                    <small class="text-muted">目前影片預覽：</small><br>
+                                    <iframe width="300" height="169" 
+                                            src="https://www.youtube.com/embed/<?= htmlspecialchars($editSermon['youtube_id']) ?>" 
+                                            title="講道影片預覽"
+                                            frameborder="0" 
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                            allowfullscreen></iframe>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -322,7 +341,7 @@ $title = '後台管理 - 講道管理';
                     </div>
                     <div class="modal-footer">
                         <a href="sermons.php" class="btn btn-secondary">取消</a>
-                        <button type="submit" class="btn btn-primary"><?= $editSermon ? '更新' : '上傳' ?></button>
+                        <button type="submit" class="btn btn-primary"><?= $editSermon ? '更新' : '新增' ?></button>
                     </div>
                 </form>
             </div>

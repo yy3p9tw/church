@@ -62,6 +62,9 @@
                         <a class="nav-link" href="events.php">活動</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="bulletins.php">週報</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="news.php">消息</a>
                     </li>
                     <li class="nav-item">

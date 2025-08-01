@@ -6,6 +6,27 @@ if (isset($_GET['logout'])) {
     logout();
 }
 
+// 獲取統計數據 (使用 auth.php 中已載入的 $db)
+try {
+    // 最新消息數量
+    $newsCount = $db->fetchOne("SELECT COUNT(*) as count FROM news")['count'];
+    
+    // 講道篇數
+    $sermonsCount = $db->fetchOne("SELECT COUNT(*) as count FROM sermons")['count'];
+    
+    // 活動數量
+    $eventsCount = $db->fetchOne("SELECT COUNT(*) as count FROM events")['count'];
+    
+    // 同工人員數量
+    $staffCount = $db->fetchOne("SELECT COUNT(*) as count FROM staff")['count'];
+} catch (Exception $e) {
+    // 如果查詢失敗，使用預設值
+    $newsCount = 0;
+    $sermonsCount = 0;
+    $eventsCount = 0;
+    $staffCount = 0;
+}
+
 $title = '後台管理 - 儀表板';
 ?>
 <!DOCTYPE html>
@@ -73,6 +94,10 @@ $title = '後台管理 - 儀表板';
                         <i class="fas fa-calendar me-2"></i>
                         活動管理
                     </a>
+                    <a class="nav-link" href="bulletins.php">
+                        <i class="fas fa-file-alt me-2"></i>
+                        週報管理
+                    </a>
                     <a class="nav-link" href="staff.php">
                         <i class="fas fa-users me-2"></i>
                         同工管理
@@ -111,7 +136,7 @@ $title = '後台管理 - 儀表板';
                         <div class="card stat-card">
                             <div class="card-body text-center">
                                 <i class="fas fa-newspaper fa-2x mb-2"></i>
-                                <h4>12</h4>
+                                <h4><?= $newsCount ?></h4>
                                 <p class="mb-0">最新消息</p>
                             </div>
                         </div>
@@ -120,7 +145,7 @@ $title = '後台管理 - 儀表板';
                         <div class="card stat-card">
                             <div class="card-body text-center">
                                 <i class="fas fa-microphone fa-2x mb-2"></i>
-                                <h4>28</h4>
+                                <h4><?= $sermonsCount ?></h4>
                                 <p class="mb-0">講道篇數</p>
                             </div>
                         </div>
@@ -129,7 +154,7 @@ $title = '後台管理 - 儀表板';
                         <div class="card stat-card">
                             <div class="card-body text-center">
                                 <i class="fas fa-calendar fa-2x mb-2"></i>
-                                <h4>5</h4>
+                                <h4><?= $eventsCount ?></h4>
                                 <p class="mb-0">近期活動</p>
                             </div>
                         </div>
@@ -138,7 +163,7 @@ $title = '後台管理 - 儀表板';
                         <div class="card stat-card">
                             <div class="card-body text-center">
                                 <i class="fas fa-users fa-2x mb-2"></i>
-                                <h4>8</h4>
+                                <h4><?= $staffCount ?></h4>
                                 <p class="mb-0">同工人員</p>
                             </div>
                         </div>

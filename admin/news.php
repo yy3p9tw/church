@@ -6,6 +6,21 @@ requireLogin();
 $error = '';
 $success = '';
 
+// 檢查URL參數中的成功訊息
+if (isset($_GET['success'])) {
+    switch ($_GET['success']) {
+        case 'updated':
+            $success = '消息已成功更新';
+            break;
+        case 'added':
+            $success = '消息已成功新增';
+            break;
+        case 'deleted':
+            $success = '消息已刪除';
+            break;
+    }
+}
+
 // 處理新增/編輯
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? 'add';
@@ -13,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim($_POST['title'] ?? '');
     $content = trim($_POST['content'] ?? '');
     $news_date = $_POST['news_date'] ?? date('Y-m-d');
+    $status = $_POST['status'] ?? 'published';
     
     if (empty($title) || empty($content)) {
         $error = '標題和內容不能為空';
@@ -33,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$error) {
                 if ($action === 'edit' && $id) {
                     // 更新
-                    $sql = "UPDATE news SET title = ?, content = ?, news_date = ?";
-                    $params = [$title, $content, $news_date];
+                    $sql = "UPDATE news SET title = ?, content = ?, news_date = ?, status = ?";
+                    $params = [$title, $content, $news_date, $status];
                     
                     if ($image_url) {
                         $sql .= ", image_url = ?";
@@ -45,14 +61,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $params[] = $id;
                     
                     $db->query($sql, $params);
-                    $success = '消息已成功更新';
+                    // 更新成功後重導向
+                    header('Location: news.php?success=updated');
+                    exit;
                 } else {
                     // 新增
                     $db->query(
-                        "INSERT INTO news (title, content, news_date, image_url, status) VALUES (?, ?, ?, ?, 'published')",
-                        [$title, $content, $news_date, $image_url]
+                        "INSERT INTO news (title, content, news_date, image_url, status) VALUES (?, ?, ?, ?, ?)",
+                        [$title, $content, $news_date, $image_url, $status]
                     );
-                    $success = '消息已成功新增';
+                    // 新增成功後重導向
+                    header('Location: news.php?success=added');
+                    exit;
                 }
             }
         } catch (Exception $e) {
@@ -151,6 +171,10 @@ $title = '後台管理 - 最新消息';
                         <i class="fas fa-calendar me-2"></i>
                         活動管理
                     </a>
+                    <a class="nav-link" href="bulletins.php">
+                        <i class="fas fa-file-alt me-2"></i>
+                        週報管理
+                    </a>
                     <a class="nav-link" href="staff.php">
                         <i class="fas fa-users me-2"></i>
                         同工管理
@@ -211,6 +235,7 @@ $title = '後台管理 - 最新消息';
                                         <th>ID</th>
                                         <th>標題</th>
                                         <th>發布日期</th>
+                                        <th>狀態</th>
                                         <th>操作</th>
                                     </tr>
                                 </thead>
@@ -225,6 +250,13 @@ $title = '後台管理 - 最新消息';
                                             <?php endif; ?>
                                         </td>
                                         <td><?= $item['news_date'] ?: $item['created_at'] ?></td>
+                                        <td>
+                                            <?php if ($item['status'] === 'published'): ?>
+                                                <span class="badge bg-success">已發布</span>
+                                            <?php else: ?>
+                                                <span class="badge bg-secondary">草稿</span>
+                                            <?php endif; ?>
+                                        </td>
                                         <td>
                                             <a href="?edit=<?= $item['id'] ?>" class="btn btn-sm btn-outline-primary me-1">
                                                 <i class="fas fa-edit"></i>
@@ -268,6 +300,13 @@ $title = '後台管理 - 最新消息';
                             <label for="news_date" class="form-label">發布日期</label>
                             <input type="date" class="form-control" id="news_date" name="news_date" 
                                    value="<?= $editNews ? $editNews['news_date'] : date('Y-m-d') ?>">
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">狀態</label>
+                            <select class="form-control" id="status" name="status">
+                                <option value="published" <?= (!$editNews || $editNews['status'] === 'published') ? 'selected' : '' ?>>已發布</option>
+                                <option value="draft" <?= ($editNews && $editNews['status'] === 'draft') ? 'selected' : '' ?>>草稿</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="image" class="form-label">圖片</label>

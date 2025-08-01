@@ -9,7 +9,7 @@ $news = $db->fetchAll("SELECT * FROM news WHERE status = 'published' ORDER BY ne
 $sermons = $db->fetchAll("SELECT * FROM sermons WHERE status = 'published' ORDER BY sermon_date DESC, created_at DESC LIMIT 3");
 
 // 獲取近期活動
-$events = $db->fetchAll("SELECT * FROM events WHERE status = 'published' AND start_time >= datetime('now') ORDER BY start_time ASC LIMIT 3");
+$events = $db->fetchAll("SELECT * FROM events WHERE status = 'published' AND start_time >= " . $db->now() . " ORDER BY start_time ASC LIMIT 3");
 
 // 獲取輪播圖（如果有）
 $sliders = $db->fetchAll("SELECT * FROM sliders ORDER BY sort_order ASC");

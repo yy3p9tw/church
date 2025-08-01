@@ -55,13 +55,26 @@ include 'includes/header.php';
                             </div>
                         </div>
                         
-                        <?php if ($sermon['audio_url']): ?>
+                        <?php if ($sermon['youtube_id']): ?>
                             <div class="mb-4">
-                                <h5>音頻播放</h5>
-                                <audio controls class="w-100" style="max-width: 500px;">
-                                    <source src="public/<?= $sermon['audio_url'] ?>" type="audio/mpeg">
-                                    您的瀏覽器不支援音頻播放
-                                </audio>
+                                <h5>講道影片</h5>
+                                <div class="ratio ratio-16x9" style="max-width: 800px;">
+                                    <iframe src="https://www.youtube.com/embed/<?= htmlspecialchars($sermon['youtube_id']) ?>" 
+                                            title="<?= htmlspecialchars($sermon['title']) ?>"
+                                            frameborder="0" 
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                            allowfullscreen></iframe>
+                                </div>
+                            </div>
+                        <?php elseif ($sermon['youtube_url']): ?>
+                            <div class="mb-4">
+                                <h5>講道影片</h5>
+                                <div class="alert alert-info">
+                                    <i class="fas fa-play-circle me-2"></i>
+                                    <a href="<?= htmlspecialchars($sermon['youtube_url']) ?>" target="_blank" class="alert-link">
+                                        在 YouTube 觀看講道影片
+                                    </a>
+                                </div>
                             </div>
                         <?php endif; ?>
                         
@@ -126,12 +139,21 @@ include 'includes/header.php';
                                         </p>
                                     <?php endif; ?>
                                     
-                                    <?php if ($sermon['audio_url']): ?>
+                                    <?php if ($sermon['youtube_id']): ?>
                                         <div class="mb-3">
-                                            <audio controls class="w-100">
-                                                <source src="public/<?= $sermon['audio_url'] ?>" type="audio/mpeg">
-                                                您的瀏覽器不支援音頻播放
-                                            </audio>
+                                            <div class="ratio ratio-16x9">
+                                                <iframe src="https://www.youtube.com/embed/<?= htmlspecialchars($sermon['youtube_id']) ?>" 
+                                                        title="<?= htmlspecialchars($sermon['title']) ?>"
+                                                        frameborder="0" 
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                        allowfullscreen></iframe>
+                                            </div>
+                                        </div>
+                                    <?php elseif ($sermon['youtube_url']): ?>
+                                        <div class="mb-3">
+                                            <a href="<?= htmlspecialchars($sermon['youtube_url']) ?>" target="_blank" class="btn btn-outline-danger btn-sm">
+                                                <i class="fab fa-youtube me-1"></i>觀看影片
+                                            </a>
                                         </div>
                                     <?php endif; ?>
                                     

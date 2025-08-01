@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/database.php';
+require_once dirname(__DIR__) . '/config/database.php';
 
 function requireLogin() {
     if (!isset($_SESSION['admin_user'])) {
@@ -26,7 +26,7 @@ function checkLogin($email, $password) {
             // 更新最後登入時間（如果支援）
             try {
                 $db->query(
-                    "UPDATE users SET last_login_at = datetime('now') WHERE id = ?", 
+                    "UPDATE users SET last_login_at = " . $db->now() . " WHERE id = ?", 
                     [$user['id']]
                 );
             } catch (Exception $e) {

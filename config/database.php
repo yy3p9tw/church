@@ -35,6 +35,15 @@ class Database {
         return $this->pdo;
     }
     
+    public function isMySQL() {
+        $this->connect();
+        return $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'mysql';
+    }
+    
+    public function now() {
+        return $this->isMySQL() ? 'NOW()' : "datetime('now')";
+    }
+    
     private function connectSQLite() {
         try {
             $sqliteFile = __DIR__ . '/../database/church.sqlite';
@@ -100,7 +109,8 @@ class Database {
             title VARCHAR(255) NOT NULL,
             speaker VARCHAR(255) NOT NULL,
             sermon_date DATE NOT NULL,
-            audio_url VARCHAR(255),
+            youtube_url VARCHAR(500),
+            youtube_id VARCHAR(50),
             content TEXT,
             status VARCHAR(20) DEFAULT 'published',
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -140,6 +150,31 @@ class Database {
             image_url VARCHAR(255) NOT NULL,
             link_url VARCHAR(255),
             sort_order INTEGER DEFAULT 0,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+        
+        -- 聯絡訊息表
+        CREATE TABLE IF NOT EXISTS contact_messages (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL,
+            phone VARCHAR(50),
+            subject VARCHAR(255) NOT NULL,
+            message TEXT NOT NULL,
+            status VARCHAR(20) DEFAULT 'unread',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+        
+        -- 週報表
+        CREATE TABLE IF NOT EXISTS bulletins (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title VARCHAR(255) NOT NULL,
+            image_url VARCHAR(255),
+            pdf_url VARCHAR(255),
+            publish_date DATE,
+            status VARCHAR(20) DEFAULT 'published',
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
