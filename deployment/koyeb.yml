@@ -1,0 +1,45 @@
+# Koyeb 部署配置
+
+version: 2
+
+# 服務配置
+services:
+  - name: church-website
+    type: web
+    
+    # 建置設定
+    build:
+      type: docker
+      dockerfile: deployment/Dockerfile
+    
+    # 運行設定
+    instance_type: nano
+    regions: 
+      - fra
+    
+    # 端口設定
+    ports:
+      - port: 80
+        protocol: http
+    
+    # 環境變數
+    env:
+      - name: DB_HOST
+        value: localhost
+      - name: DB_NAME
+        value: church_db
+      - name: DB_USER
+        value: root
+      - name: DB_PASS
+        value: ""
+      - name: DEBUG
+        value: "false"
+    
+    # 健康檢查
+    health_checks:
+      - path: /
+        port: 80
+        protocol: http
+        interval: 30s
+        timeout: 10s
+        retries: 3

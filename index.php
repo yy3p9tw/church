@@ -1,5 +1,19 @@
 <?php
 $title = '首頁 - 基督教會';
+require_once 'config/database.php';
+
+// 獲取最新消息
+$news = $db->fetchAll("SELECT * FROM news WHERE status = 'published' ORDER BY news_date DESC, created_at DESC LIMIT 3");
+
+// 獲取最新講道
+$sermons = $db->fetchAll("SELECT * FROM sermons WHERE status = 'published' ORDER BY sermon_date DESC, created_at DESC LIMIT 3");
+
+// 獲取近期活動
+$events = $db->fetchAll("SELECT * FROM events WHERE status = 'published' AND start_time >= datetime('now') ORDER BY start_time ASC LIMIT 3");
+
+// 獲取輪播圖（如果有）
+$sliders = $db->fetchAll("SELECT * FROM sliders ORDER BY sort_order ASC");
+
 include 'includes/header.php';
 ?>
 
@@ -76,34 +90,31 @@ include 'includes/header.php';
             </div>
         </div>
         <div class="row g-4">
-            <div class="col-md-6 col-lg-4">
-                <div class="card border-0 shadow-sm card-hover">
-                    <img src="https://images.unsplash.com/photo-1544207240-1f1000e8bf32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="復活節慶典">
-                    <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted">2024/03/31</h6>
-                        <h5 class="card-title">復活節慶典</h5>
-                        <p class="card-text">歡迎參與我們的復活節慶典，一同慶祝主耶穌的復活。</p>
-                        <a href="news.php" class="btn btn-outline-primary btn-sm">閱讀更多</a>
+            <?php if (!empty($news)): ?>
+                <?php foreach ($news as $item): ?>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card border-0 shadow-sm card-hover">
+                        <?php if ($item['image_url']): ?>
+                            <img src="public/<?= $item['image_url'] ?>" class="card-img-top" alt="<?= htmlspecialchars($item['title']) ?>" style="height: 200px; object-fit: cover;">
+                        <?php else: ?>
+                            <img src="https://images.unsplash.com/photo-1544207240-1f1000e8bf32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="<?= htmlspecialchars($item['title']) ?>" style="height: 200px; object-fit: cover;">
+                        <?php endif; ?>
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                <?= $item['news_date'] ?: date('Y/m/d', strtotime($item['created_at'])) ?>
+                            </h6>
+                            <h5 class="card-title"><?= htmlspecialchars($item['title']) ?></h5>
+                            <p class="card-text"><?= htmlspecialchars(substr($item['content'], 0, 80)) ?>...</p>
+                            <a href="news.php?id=<?= $item['id'] ?>" class="btn btn-outline-primary btn-sm">閱讀更多</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="card border-0 shadow-sm card-hover">
-                    <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="青年營會">
-                    <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted">2024/04/15</h6>
-                        <h5 class="card-title">青年營會</h5>
-                        <p class="card-text">為期三天的青年營會，透過遊戲與分享建立深厚友誼。</p>
-                        <a href="news.php" class="btn btn-outline-primary btn-sm">閱讀更多</a>
-                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="col-12 text-center">
+                    <p class="text-muted">目前沒有最新消息</p>
                 </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="card border-0 shadow-sm card-hover">
-                    <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="社區服務">
-                    <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted">2024/04/20</h6>
-                        <h5 class="card-title">社區服務</h5>
+            <?php endif; ?>
                         <p class="card-text">參與社區清潔活動，實踐愛鄰舍的聖經教導。</p>
                         <a href="news.php" class="btn btn-outline-primary btn-sm">閱讀更多</a>
                     </div>

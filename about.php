@@ -1,5 +1,10 @@
 <?php
 $title = '關於我們 - 基督教會';
+require_once 'config/database.php';
+
+// 獲取同工資料
+$staff = $db->fetchAll("SELECT * FROM staff WHERE status = 1 ORDER BY sort_order ASC, created_at ASC");
+
 include 'includes/header.php';
 ?>
 
@@ -52,6 +57,45 @@ include 'includes/header.php';
                     <p>多年來，教會不僅在靈性上服事會友，也積極參與社區服務，包括長者關懷、兒童教育、社會救助等各項事工，實踐基督愛人如己的教導。</p>
                 </div>
             </div>
+            
+            <!-- 同工團隊 -->
+            <?php if (!empty($staff)): ?>
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h3 class="text-center mb-4">同工團隊</h3>
+                </div>
+            </div>
+            <div class="row">
+                <?php foreach ($staff as $member): ?>
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 text-center shadow-sm">
+                        <div class="card-body">
+                            <?php if ($member['photo']): ?>
+                                <img src="public/<?= $member['photo'] ?>" 
+                                     alt="<?= htmlspecialchars($member['name']) ?>" 
+                                     class="rounded-circle mb-3" 
+                                     style="width: 120px; height: 120px; object-fit: cover;">
+                            <?php else: ?>
+                                <div class="bg-secondary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" 
+                                     style="width: 120px; height: 120px;">
+                                    <i class="fas fa-user fa-3x text-white"></i>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <h5 class="card-title"><?= htmlspecialchars($member['name']) ?></h5>
+                            <p class="text-primary fw-bold"><?= htmlspecialchars($member['title']) ?></p>
+                            
+                            <?php if ($member['bio']): ?>
+                                <p class="card-text text-muted small">
+                                    <?= htmlspecialchars($member['bio']) ?>
+                                </p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
