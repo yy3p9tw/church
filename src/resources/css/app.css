@@ -1,0 +1,291 @@
+/* 針對主選單所有連結（含 dropdown button）強制白色、粗體、無底線 */
+.main-navbar > .container > nav > a,
+.main-navbar > .container > nav > .dropdown > a {
+  color: #fff !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  font-size: 1.13rem;
+  padding-top: 1.1rem;
+  padding-bottom: 1.1rem;
+  margin: 0 0.25rem;
+  transition: color 0.2s;
+}
+.main-navbar > .container > nav > a:hover,
+.main-navbar > .container > nav > .dropdown > a:hover,
+.main-navbar > .container > nav > a:focus,
+.main-navbar > .container > nav > .dropdown > a:focus {
+  color: var(--accent-gold) !important;
+  text-shadow: 0 2px 8px rgba(230,201,138,0.12);
+  text-decoration: none !important;
+}
+/* Lava 風格輪播圖片漸層覆蓋特效 */
+.slider-img {
+  position: relative;
+  z-index: 1;
+}
+.slider-img::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(120deg, rgba(255,186,71,0.32) 0%, rgba(255,106,0,0.38) 60%, rgba(255,215,0,0.22) 100%);
+  mix-blend-mode: lighten;
+}
+/* Lava 風格主選單標題漸層字色與 hover 效果 */
+
+/* 強制首頁導覽（含下拉）連結：白色、粗體、無底線 */
+.navbar .nav-link, .navbar .dropdown-item {
+  color: #fff !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+}
+.navbar .nav-link.active, .navbar .nav-link:focus, .navbar .nav-link:hover {
+  color: var(--accent-gold) !important;
+  text-shadow: 0 2px 8px rgba(230,201,138,0.12);
+  text-decoration: none !important;
+}
+.main-navbar .dropdown-menu {
+  background: #fff !important;
+  border-radius: 0.85rem;
+  box-shadow: 0 4px 18px 0 rgba(58,77,57,0.10);
+}
+.main-navbar .dropdown-menu a,
+.main-navbar .dropdown-menu a:link,
+.main-navbar .dropdown-menu a:visited,
+.main-navbar .dropdown-menu a:active {
+  color: var(--accent-dark) !important;
+  background: transparent !important;
+  text-decoration: none !important;
+}
+.main-navbar .dropdown-menu a:hover,
+.main-navbar .dropdown-menu a:focus,
+.main-navbar .dropdown-menu a.active {
+  color: var(--accent) !important;
+  background: rgba(191,161,74,0.08) !important;
+  text-decoration: none !important;
+}
+*{
+    box-sizing: border-box;
+    font-family: 'Noto Sans TC', sans-serif;
+}
+/* 首頁輪播全螢幕寬度與高度貼齊導覽列 */
+
+.slider-fullscreen {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  border-radius: 0;
+  z-index: 1;
+
+}
+.slider-img {
+  width: 100vw !important;
+  height: calc(100vh - 88px); /* 88px 為導覽列高度，視實際調整 */
+  object-fit: cover;
+  border-radius: 0 !important;
+  display: block;
+  margin: 0 auto;
+}
+@media (max-width: 768px) {
+  .slider-img {
+    height: 40vw;
+  }
+}
+
+/* 日系教會形象網站主題色 */
+
+:root {
+  /* 主色系 - 日系墨綠 */
+  --green-900: #263528;
+  --green-800: #2d3a32;
+  --green-700: #3a4d39;
+  --green-600: #4b5e4a;
+  --green-500: #5e7260;
+  --green-400: #7a8c7a;
+  --green-300: #a2b1a2;
+  --green-200: #cfd7cf;
+  --green-100: #f6f7f3;
+  /* 金色系 */
+  --gold-900: #bfa14a;
+  --gold-700: #e6c98a;
+  --gold-500: #f5e6b2;
+  --gold-100: #fdf8e7;
+  /* 灰階 */
+  --gray-900: #222;
+  --gray-700: #444;
+  --gray-500: #888;
+  --gray-300: #ccc;
+  --gray-100: #f8f9fa;
+  /* 輔助色 */
+  --red: #e57373;
+  --yellow: #ffe082;
+  --blue: #64b5f6;
+  --success: #6fcf97;
+  --info: #56ccf2;
+  --warning: #ffe082;
+  --danger: #e57373;
+  /* 語意色 */
+  --primary: var(--green-700);
+  --primary-dark: var(--green-900);
+  --primary-light: var(--green-300);
+  --accent: var(--gold-700);
+  --accent-dark: var(--gold-900);
+  --accent-light: var(--gold-100);
+  --bg-light: var(--green-100);
+  --text-main: var(--gray-900);
+  --card-shadow: 0 4px 24px 0 rgba(58,77,57,0.08);
+  --font-sans: 'Noto Sans TC', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+body, .container, .card, .navbar, .dropdown-menu, .form-control, .form-select {
+  font-family: var(--font-sans);
+}
+body {
+  background: var(--bg-light);
+  color: var(--text-main);
+}
+.navbar, .bg-dark {
+  background: linear-gradient(90deg, var(--main-green-dark) 0%, var(--main-green) 100%) !important;
+  min-height: 112px;
+  height: 112px;
+  display: flex;
+  align-items: center;
+  font-size: 1.18rem;
+  box-shadow: 0 6px 24px 0 rgba(58,77,57,0.10);
+}
+.navbar .navbar-brand {
+  color: var(--accent-gold-dark) !important;
+  font-size: 2.1rem;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  text-shadow: 0 2px 8px rgba(58,77,57,0.08);
+}
+.navbar .nav-link, .navbar .dropdown-item {
+  color: #fff !important;
+  font-size: 1.13rem;
+  padding-top: 1.1rem;
+  padding-bottom: 1.1rem;
+  margin: 0 0.25rem;
+  transition: color 0.2s;
+}
+.navbar .nav-link.active, .navbar .nav-link:focus, .navbar .nav-link:hover {
+  color: var(--accent-gold) !important;
+  text-shadow: 0 2px 8px rgba(230,201,138,0.12);
+}
+.btn-primary {
+  background: var(--main-green);
+  border-color: var(--main-green);
+  color: #fff;
+  box-shadow: 0 2px 8px 0 rgba(58,77,57,0.08);
+  transition: background 0.2s, border 0.2s, color 0.2s;
+}
+.btn-primary:hover, .btn-primary:focus {
+  background: var(--accent-gold);
+  border-color: var(--accent-gold);
+  color: var(--main-green-dark);
+}
+.btn-outline-primary {
+  color: var(--main-green);
+  border-color: var(--main-green);
+  background: #fff;
+  transition: background 0.2s, border 0.2s, color 0.2s;
+}
+.btn-outline-primary:hover, .btn-outline-primary:focus {
+  background: var(--accent-gold);
+  border-color: var(--accent-gold);
+  color: var(--main-green-dark);
+}
+h1, h2, h3, h4, h5, h6 {
+  color: var(--main-green-dark);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 8px rgba(58,77,57,0.06);
+}
+.card {
+  border-radius: 1.1rem;
+  box-shadow: var(--card-shadow);
+  border: none;
+  background: #fff;
+}
+.card-title {
+  color: var(--main-green-dark);
+  font-weight: 600;
+}
+.carousel-caption {
+  background: rgba(58,77,57,0.68);
+  color: #fff;
+  border-radius: 1.1rem;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.5rem 1rem 2.5rem 1rem;
+  text-shadow: 0 2px 8px rgba(58,77,57,0.18);
+}
+.carousel-caption h2, .carousel-caption h3, .carousel-caption h4 {
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.045em;
+  text-shadow: 0 2px 8px rgba(58,77,57,0.22);
+}
+.carousel-indicators [data-bs-target] {
+  background-color: var(--accent-gold-dark);
+}
+.form-label {
+  color: var(--main-green-dark);
+  font-weight: 500;
+}
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+  background: var(--main-green-dark);
+  border-color: var(--main-green-dark);
+}
+.dropdown-menu {
+  border-radius: 0.85rem;
+  box-shadow: 0 4px 18px 0 rgba(58,77,57,0.10);
+  background: #fff;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap');
+@import 'tailwindcss';
+
+
+
+/* 前台頁尾墨綠色樣式 */
+.footer-dark {
+  background: var(--green-900) !important;
+  color: #fff;
+}
+
+/* 前台主導覽列樣式（高度與主題色一致） */
+.main-navbar {
+  background: linear-gradient(90deg, var(--green-900) 0%, var(--green-700) 100%) !important;
+  min-height: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  font-size: 1.18rem;
+  box-shadow: 0 6px 24px 0 rgba(58,77,57,0.10);
+  color: var(--accent-dark);
+}
+
+/* 強制首頁主導覽列連結為白色、粗體、無底線，並覆蓋所有舊有樣式 */
+.main-navbar .nav-link,
+.main-navbar .dropdown-item {
+  color: #fff !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+}
+.main-navbar .nav-link.active,
+.main-navbar .nav-link:focus,
+.main-navbar .nav-link:hover {
+  color: var(--accent-gold) !important;
+  text-shadow: 0 2px 8px rgba(230,201,138,0.12);
+  text-decoration: none !important;
+}
