@@ -24,9 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // 處理圖片上傳
             $image_url = '';
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                $imageUpload = new ImageUpload('public/uploads/events/');
+                // 強制使用 public/uploads/events/ 目錄
+                $imageUpload = new ImageUpload();
                 $result = $imageUpload->upload($_FILES['image']);
-                if ($result) {
+                if ($result && !empty($result['path'])) {
+                    // 存路徑為 uploads/events/xxx.jpg
                     $image_url = str_replace('public/', '', $result['path']);
                 } else {
                     $error = '圖片上傳失敗：' . $imageUpload->getLastError();

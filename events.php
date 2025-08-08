@@ -44,7 +44,7 @@ include 'includes/header.php';
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card h-100 shadow-sm hover-card">
                         <?php if (!empty($event['image_url'])): ?>
-                            <img src="<?= htmlspecialchars($event['image_url']) ?>" 
+                            <img src="public/<?= htmlspecialchars($event['image_url']) ?>" 
                                  class="card-img-top" 
                                  alt="<?= htmlspecialchars($event['title']) ?>"
                                  style="height: 200px; object-fit: cover;">
@@ -117,7 +117,7 @@ include 'includes/header.php';
                             </div>
                             <div class="modal-body">
                                 <?php if (!empty($event['image_url'])): ?>
-                                    <img src="<?= htmlspecialchars($event['image_url']) ?>" 
+                                    <img src="public/<?= htmlspecialchars($event['image_url']) ?>" 
                                          class="img-fluid mb-3 rounded" 
                                          alt="<?= htmlspecialchars($event['title']) ?>">
                                 <?php endif; ?>

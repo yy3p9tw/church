@@ -44,7 +44,13 @@ include 'includes/header.php';
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card h-100 shadow-sm hover-card">
                         <?php if (!empty($bulletin['image_url'])): ?>
-                            <img src="<?= htmlspecialchars($bulletin['image_url']) ?>" 
+                            <?php 
+                                $img = $bulletin['image_url'];
+                                $imgSrc = (!empty($img) && (preg_match('/^https?:\\/\\//i', $img) || strpos($img, '/') === 0)) 
+                                    ? $img 
+                                    : ('public/' . $img);
+                            ?>
+                            <img src="<?= htmlspecialchars($imgSrc) ?>" 
                                  class="card-img-top" 
                                  alt="<?= htmlspecialchars($bulletin['title']) ?>"
                                  style="height: 300px; object-fit: cover;">
@@ -69,7 +75,13 @@ include 'includes/header.php';
                             
                             <div class="mt-auto">
                                 <?php if (!empty($bulletin['pdf_url'])): ?>
-                                    <a href="<?= htmlspecialchars($bulletin['pdf_url']) ?>" 
+                                    <?php 
+                                        $pdf = $bulletin['pdf_url'];
+                                        $pdfLink = (!empty($pdf) && (preg_match('/^https?:\\/\\//i', $pdf) || strpos($pdf, '/') === 0))
+                                            ? $pdf
+                                            : ('public/' . $pdf);
+                                    ?>
+                                    <a href="<?= htmlspecialchars($pdfLink) ?>" 
                                        target="_blank" 
                                        class="btn btn-primary">
                                         <i class="fas fa-file-pdf me-2"></i>下載週報 PDF
@@ -98,7 +110,13 @@ include 'includes/header.php';
                             </div>
                             <div class="modal-body text-center">
                                 <?php if (!empty($bulletin['image_url'])): ?>
-                                    <img src="<?= htmlspecialchars($bulletin['image_url']) ?>" 
+                                    <?php 
+                                        $img = $bulletin['image_url'];
+                                        $imgSrc = (!empty($img) && (preg_match('/^https?:\\/\\//i', $img) || strpos($img, '/') === 0)) 
+                                            ? $img 
+                                            : ('public/' . $img);
+                                    ?>
+                                    <img src="<?= htmlspecialchars($imgSrc) ?>" 
                                          class="img-fluid rounded" 
                                          alt="<?= htmlspecialchars($bulletin['title']) ?>"
                                          style="max-height: 70vh;">
@@ -114,7 +132,13 @@ include 'includes/header.php';
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
                                 <?php if (!empty($bulletin['pdf_url'])): ?>
-                                    <a href="<?= htmlspecialchars($bulletin['pdf_url']) ?>" 
+                                    <?php 
+                                        $pdf = $bulletin['pdf_url'];
+                                        $pdfLink = (!empty($pdf) && (preg_match('/^https?:\\/\\//i', $pdf) || strpos($pdf, '/') === 0))
+                                            ? $pdf
+                                            : ('public/' . $pdf);
+                                    ?>
+                                    <a href="<?= htmlspecialchars($pdfLink) ?>" 
                                        target="_blank" 
                                        class="btn btn-primary">
                                         <i class="fas fa-file-pdf me-2"></i>下載 PDF

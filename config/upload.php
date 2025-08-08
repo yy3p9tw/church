@@ -1,16 +1,21 @@
 <?php
 class FileUpload {
-    private $uploadDir;
+    private $rootDir;      // 專案根目錄的絕對路徑 (含結尾分隔符)
+    private $uploadRel;    // 上傳目錄的相對路徑（如 public/uploads/）以斜線結尾
     private $allowedTypes;
     private $maxSize;
+    private $lastError;
     
     public function __construct($uploadDir = 'public/uploads/', $allowedTypes = [], $maxSize = 10485760) {
-        $this->uploadDir = rtrim($uploadDir, '/') . '/';
+        // 基底目錄：config/ 的上一層即專案根目錄
+        $this->rootDir = rtrim(dirname(__DIR__), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        // 標準化相對路徑（使用正斜線並以斜線結尾）
+        $this->uploadRel = rtrim(str_replace('\\', '/', $uploadDir), '/') . '/';
         $this->allowedTypes = $allowedTypes;
         $this->maxSize = $maxSize; // 預設10MB
         
         // 確保上傳目錄存在
-        $this->ensureDirectoryExists($this->uploadDir);
+        $this->ensureDirectoryExists($this->rootPath($this->uploadRel));
     }
     
     private function ensureDirectoryExists($dir) {
@@ -25,21 +30,38 @@ class FileUpload {
         }
         
         $fileName = $this->generateFileName($file['name']);
-        $targetDir = $this->uploadDir . ($subDir ? rtrim($subDir, '/') . '/' : '');
-        $this->ensureDirectoryExists($targetDir);
+        $targetRelDir = $this->uploadRel . ($subDir ? rtrim(str_replace('\\', '/', $subDir), '/') . '/' : '');
+        $targetAbsDir = $this->rootPath($targetRelDir);
+        $this->ensureDirectoryExists($targetAbsDir);
+
+        $targetAbsPath = $targetAbsDir . $fileName;
         
-        $targetPath = $targetDir . $fileName;
-        
-        if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+        if (move_uploaded_file($file['tmp_name'], $targetAbsPath)) {
+            $relPath = $targetRelDir . $fileName; // 例如 public/uploads/news/xxx.jpg
             return [
                 'success' => true,
                 'filename' => $fileName,
-                'path' => $targetPath,
-                'url' => str_replace($_SERVER['DOCUMENT_ROOT'], '', $targetPath)
+                // 相對於專案根目錄的路徑（維持現有呼叫端習慣）
+                'path' => str_replace('\\', '/', $relPath),
+                // 絕對檔案系統路徑（供需要時使用）
+                'abs_path' => $targetAbsPath,
+                // 網址路徑（盡量使用 / 開頭的相對根路徑）
+                'url' => '/' . str_replace('\\', '/', $relPath)
             ];
         }
         
         return false;
+    }
+
+    private function rootPath($relative) {
+        // 將 public/... 相對路徑轉為檔案系統絕對路徑
+        $relative = ltrim(str_replace('\\', '/', $relative), '/');
+        $abs = $this->rootDir . str_replace('/', DIRECTORY_SEPARATOR, $relative);
+        // 確保目錄路徑以分隔符結尾（用於資料夾）
+        if (substr($abs, -1) !== DIRECTORY_SEPARATOR) {
+            $abs .= DIRECTORY_SEPARATOR;
+        }
+        return $abs;
     }
     
     private function validateFile($file) {
@@ -119,7 +141,7 @@ class FileUpload {
 
 // 預定義上傳配置
 class ImageUpload extends FileUpload {
-    public function __construct($uploadDir = 'public/uploads/images/') {
+    public function __construct($uploadDir = 'public/uploads/events/') {
         $allowedTypes = [
             'image/jpeg', 'image/png', 'image/gif', 'image/webp',
             'jpg', 'jpeg', 'png', 'gif', 'webp'
