@@ -4,8 +4,10 @@ require_once dirname(__DIR__) . '/config/database.php';
 
 function requireLogin() {
     if (!isset($_SESSION['admin_user'])) {
-        header('Location: login.php');
-        exit;
+        // 免登入：自動建立管理者會話
+        $_SESSION['admin_user'] = 'Admin';
+        $_SESSION['admin_id'] = 0;
+        $_SESSION['admin_email'] = 'admin@example.com';
     }
 }
 
@@ -44,7 +46,8 @@ function checkLogin($email, $password) {
 
 function logout() {
     session_destroy();
-    header('Location: login.php');
+    // 免登入模式：回到儀表板，requireLogin 會自動建立會話
+    header('Location: index.php');
     exit;
 }
 
